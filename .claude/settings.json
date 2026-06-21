@@ -1,0 +1,17 @@
+{
+  "projectName": "gitdig",
+  "description": "git 日报生成器 — CC + superpowers 实验项目",
+  "plugins": [
+    "superpowers@claude-plugins-official"
+  ],
+  "customCommands": [
+    {
+      "name": "review",
+      "description": "对 gitdig 做快速质量审查",
+      "file": ".claude/commands/review.md"
+    }
+  ],
+  "skills": [
+    ".claude/skills/gitdig-extend.md"
+  ]
+}
