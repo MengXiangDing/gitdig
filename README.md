@@ -51,3 +51,25 @@ gitdig --yesterday
 ● chore: 更新依赖版本                  [Bob]   10:15
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 共 3 条提交 · 2 位贡献者
+```
+
+## 项目结构
+
+```
+gitdig/
+├── README.md
+├── JOURNAL.md
+├── setup.py
+├── src/
+│   └── gitdig.py          # 核心逻辑，单文件
+└── .claude/
+    ├── skills/
+    │   └── gitdig-extend.md   # 如何给 gitdig 加新输出格式
+    └── commands/
+        └── review.md          # /project:review 快捷审查命令
+```
+
+## 开发背景
+
+这个项目是配合 Claude Code + superpowers 插件做的一周实验产物。
+完整的开发过程、踩坑记录、对 CC 的感受，见 [JOURNAL.md](./JOURNAL.md)。
