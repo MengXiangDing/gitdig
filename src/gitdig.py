@@ -13,9 +13,22 @@ import argparse
 import subprocess
 import sys
 import os
+import shutil
 from datetime import datetime, timedelta, date
 from pathlib import Path
 from typing import NamedTuple
+
+
+def _find_git() -> str:
+    """返回 git 可执行文件的完整路径，找不到则退出。"""
+    git = shutil.which("git") or shutil.which("git", path="/usr/bin:/usr/local/bin:/opt/homebrew/bin")
+    if not git:
+        print("[gitdig] 找不到 git，请先安装 git", file=sys.stderr)
+        sys.exit(1)
+    return git
+
+
+GIT = _find_git()
 
 
 # ─── 数据结构 ────────────────────────────────────────────────────────────────
@@ -33,7 +46,7 @@ def git_log(repo: Path, since: datetime, until: datetime, author: str = "") -> l
     """调用 git log，返回 Commit 列表。"""
     fmt = "%H\x1f%an\x1f%ai\x1f%s"
     cmd = [
-        "git", "-C", str(repo),
+        GIT, "-C", str(repo),
         "log",
         f"--since={since.isoformat()}",
         f"--until={until.isoformat()}",
@@ -54,7 +67,7 @@ def git_log(repo: Path, since: datetime, until: datetime, author: str = "") -> l
         print(f"[gitdig] git 出错: {e.stderr.strip()}", file=sys.stderr)
         return []
     except FileNotFoundError:
-        print("[gitdig] 找不到 git，请先安装 git", file=sys.stderr)
+        print(f"[gitdig] 无法执行 git: {GIT}", file=sys.stderr)
         sys.exit(1)
 
     commits = []
@@ -87,7 +100,7 @@ def git_log(repo: Path, since: datetime, until: datetime, author: str = "") -> l
 
 def is_git_repo(path: Path) -> bool:
     result = subprocess.run(
-        ["git", "-C", str(path), "rev-parse", "--git-dir"],
+        [GIT, "-C", str(path), "rev-parse", "--git-dir"],
         capture_output=True,
     )
     return result.returncode == 0
